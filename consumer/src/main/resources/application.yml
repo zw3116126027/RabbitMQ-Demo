@@ -1,0 +1,13 @@
+logging:
+  pattern:
+    dateformat: MM-dd HH:mm:ss:SSS
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /zw
+    username: zw
+    password: 123456
+    listener:
+      simple:
+        prefetch: 1 # 每个消费者一次只处理一条消息 能者多劳
