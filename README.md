@@ -48,13 +48,13 @@
 
 三个步骤依次执行。 这其中就存在3个问题： **第一**，**拓展性差** 我们目前的业务相对简单，但是随着业务规模扩大，产品的功能也在不断完善。 在大多数电商业务中，用户支付成功后都会以短信或者其它方式通知用户，告知支付成功。假如后期产品经理提出这样新的需求，你怎么办？是不是要在上述业务中再加入通知用户的业务？ 某些电商项目中，还会有积分或金币的概念。假如产品经理提出需求，用户支付成功后，给用户以积分奖励或者返还金币，你怎么办？是不是要在上述业务中再加入积分业务、返还金币业务？ 。。。 最终你的支付业务会越来越臃肿：
 
-![](./picture_libs\785322824a8006b9f6e1187c2d6dda20.png)
+![](./picture_libs/785322824a8006b9f6e1187c2d6dda20.png)
 
 也就是说每次有新的需求，现有支付逻辑都要跟着变化，代码经常变动，不符合开闭原则，拓展性不好。
 
 **第二**，**性能下降** 由于我们采用了同步调用，调用者需要等待服务提供者执行完返回结果后，才能继续向下执行，也就是说每次远程调用，调用者都是阻塞等待状态。最终整个业务的响应时长就是每次远程调用的执行时长之和：
 
-![](picture_libs\f490d01f8ca9bb800596777c1f3ca64c.png)
+![](./picture_libs/f490d01f8ca9bb800596777c1f3ca64c.png)
 
 假如每个微服务的执行时长都是50ms，则最终整个业务的耗时可能高达300ms，性能太差了。
 
@@ -88,19 +88,19 @@
 +   消息接收者：接收和处理消息的人，就是原来的服务提供方
     
 
-![](picture_libs\999c3fbc0ca07793d1702216fd07dc93.png)
+![](./picture_libs/999c3fbc0ca07793d1702216fd07dc93.png)
 
 在异步调用中，发送者不再直接同步调用接收者的业务接口，而是发送一条消息投递给消息Broker。然后接收者根据自己的需求从消息Broker那里订阅消息。每当发送方发送消息后，接受者都能获取消息并处理。 这样，发送消息的人和接收消息的人就完全解耦了。
 
 还是以余额支付业务为例：
 
-![](picture_libs\7a7ac3cbf864105c7b397ce2743b995c.png)
+![](./picture_libs/7a7ac3cbf864105c7b397ce2743b995c.png)
 
 除了扣减余额、更新支付流水单状态以外，其它调用逻辑全部取消。而是改为发送一条消息到Broker。而相关的微服务都可以订阅消息通知，一旦消息到达Broker，则会分发给每一个订阅了的微服务，处理各自的业务。
 
 假如产品经理提出了新的需求，比如要在支付成功后更新用户积分。支付代码完全不用变更，而仅仅是让积分服务也订阅消息即可：
 
-![](picture_libs\f9710012e160f150a6265db91d5e11ac.png)
+![](./picture_libs/f9710012e160f150a6265db91d5e11ac.png)
 
 不管后期增加了多少消息订阅者，作为支付服务来讲，执行问扣减余额、更新支付流水状态后，发送消息即可。业务耗时仅仅是这三部分业务耗时，仅仅100ms，大大提高了业务性能。
 
@@ -141,7 +141,7 @@
 
 几种常见MQ的对比：
 
-![](picture_libs\88724a31e660009b176df81cc343a2dd.png)
+![](./picture_libs/88724a31e660009b176df81cc343a2dd.png)
 
 > +   **追求可用性：**Kafka、 RocketMQ 、RabbitMQ
 > +   **追求可靠性：**RabbitMQ、RocketMQ
@@ -160,7 +160,7 @@
 
 ### 架构
 
-![](picture_libs\57b0085bcc38c3e653414569826ec709.png)
+![](./picture_libs/57b0085bcc38c3e653414569826ec709.png)
 
 其中包含几个概念：
 
@@ -185,13 +185,13 @@
 
 我们打开Exchanges选项卡，可以看到已经存在很多交换机：
 
-![image.png](picture_libs\105bfb97f5f643bc131fbdf12ab8977b.png)
+![image.png](./picture_libs/105bfb97f5f643bc131fbdf12ab8977b.png)
 
 我们点击任意交换机，即可进入交换机详情页面。仍然会利用控制台中的publish message 发送一条消息：
 
-![image.png](picture_libs\3f6f86322990d45aef95803a08241d65.png)
+![image.png](./picture_libs/3f6f86322990d45aef95803a08241d65.png)
 
-![image.png](picture_libs\bf9bdbeed279a5351f264e7ba0dcb5d3.png)
+![image.png](./picture_libs/bf9bdbeed279a5351f264e7ba0dcb5d3.png)
 
 这里是由控制台模拟了生产者发送的消息。由于没有消费者存在，最终消息丢失了，这样说明交换机没有存储消息的能力。
 
@@ -199,15 +199,15 @@
 
 我们打开`Queues`选项卡，新建一个队列：
 
-![image.png](picture_libs\2349fb2fa5535d7fbf90717b23b6b49a.png)
+![image.png](./picture_libs/2349fb2fa5535d7fbf90717b23b6b49a.png)
 
 命名为`hello.queue1`：
 
-![image.png](picture_libs\e2c3779da08df05f1f7f2f86a57bb09c.png)
+![image.png](./picture_libs/e2c3779da08df05f1f7f2f86a57bb09c.png)
 
 再以相同的方式，创建一个队列，密码为`hello.queue2`，最终队列列表如下：
 
-![image.png](picture_libs\8caf87c3ace67dc33e413616e9f59648.png)
+![image.png](./picture_libs/8caf87c3ace67dc33e413616e9f59648.png)
 
 此时，我们再次向`amq.fanout`交换机发送一条消息。会发现消息依然没有到达队列！！ 怎么回事呢？ 发送到交换机的消息，只会路由到与其绑定的队列，因此仅仅创建队列是不够的，我们还需要将其与交换机绑定。
 
@@ -215,29 +215,29 @@
 
 点击`Exchanges`选项卡，点击`amq.fanout`交换机，进入交换机详情页，然后点击`Bindings`菜单，在表单中填写要绑定的队列名称：
 
-![image.png](picture_libs\e964e6a42dac3128f039344da46e64ae.png)
+![image.png](./picture_libs/e964e6a42dac3128f039344da46e64ae.png)
 
 相同的方式，将hello.queue2也绑定到改交换机。 最终，绑定结果如下：
 
-![image.png](picture_libs\8789eaab702327a670ee3ce51fe396f7.png)
+![image.png](./picture_libs/8789eaab702327a670ee3ce51fe396f7.png)
 
 #### 2.2.4 发送消息
 
 再次回到exchange页面，找到刚刚绑定的`amq.fanout`，点击进入详情页，再次发送一条消息：
 
-![image.png](picture_libs\025cfac1d616a420501541274e077e89.png)
+![image.png](./picture_libs/025cfac1d616a420501541274e077e89.png)
 
 回到`Queues`页面，可以发现`hello.queue`中已经有一条消息了：
 
-![image.png](picture_libs\e9004cd5b78b58bebf6e98d1f256faf3.png)
+![image.png](./picture_libs/e9004cd5b78b58bebf6e98d1f256faf3.png)
 
 点击队列名称，进入详情页，查看队列详情，这次我们点击get message：
 
-![image.png](picture_libs\7885da0c1db7b3cd78cb6044ae0317ab.png)
+![image.png](./picture_libs/7885da0c1db7b3cd78cb6044ae0317ab.png)
 
 可以看到消息到达队列了：
 
-![image.png](picture_libs\9910b3259fa2604381d5c614d8e6301b.png)
+![image.png](./picture_libs/9910b3259fa2604381d5c614d8e6301b.png)
 
 这个时候如果有消费者监听了MQ的`hello.queue1`或`hello.queue2`队列，自然就能接收到消息了。
 
@@ -247,7 +247,7 @@
 
 点击`Admin`选项卡，首先会看到RabbitMQ控制台的用户管理界面：
 
-![image.png](picture_libs\6da443614b54a1090c9d415c0d0b0665.png)
+![image.png](./picture_libs/6da443614b54a1090c9d415c0d0b0665.png)
 
 这里的用户都是RabbitMQ的管理或运维人员。目前只有安装RabbitMQ时添加的`itheima`这个用户。仔细观察用户表格中的字段，如下：
 
@@ -267,11 +267,11 @@
 
 比如，我们给黑马商城创建一个新的用户，命名为`hmall`：
 
-![image.png](picture_libs\22ca6eafa4786f4ceff62bbc56bed3e2.png)
+![image.png](./picture_libs/22ca6eafa4786f4ceff62bbc56bed3e2.png)
 
 你会发现此时hmall用户没有任何`virtual host`的访问权限：
 
-![image.png](picture_libs\fb0d2d1162cf67ca06a1f4a417810e5f.png)
+![image.png](./picture_libs/fb0d2d1162cf67ca06a1f4a417810e5f.png)
 
 别急，接下来我们就来授权。
 
@@ -279,27 +279,27 @@
 
 我们先退出登录：
 
-![image.png](picture_libs\ddca8fd94b36f626fe40a7e9b85ebdbe.png)
+![image.png](./picture_libs/ddca8fd94b36f626fe40a7e9b85ebdbe.png)
 
 切换到刚刚创建的hmall用户登录，然后点击`Virtual Hosts`菜单，进入`virtual host`管理页：
 
-![image.png](picture_libs\91813b7233bb8ff39d5be26baf77e365.png)
+![image.png](./picture_libs/91813b7233bb8ff39d5be26baf77e365.png)
 
 可以看到目前只有一个默认的`virtual host`，名字为 `/`。 我们可以给黑马商城项目创建一个单独的`virtual host`，而不是使用默认的`/`。
 
-![image.png](picture_libs\a4952bdcb66c587458f4255b6be3b495.png)
+![image.png](./picture_libs/a4952bdcb66c587458f4255b6be3b495.png)
 
 创建完成后如图：
 
-![image.png](picture_libs\0001765a34778e11e0162441769e13cc.png)
+![image.png](./picture_libs/0001765a34778e11e0162441769e13cc.png)
 
 由于我们是登录`hmall`账户后创建的`virtual host`，因此回到`users`菜单，你会发现当前用户已经具备了对`/hmall`这个`virtual host`的访问权限了：
 
-![image.png](picture_libs\75d0c55afc84454b9639c9534c385d02.png)
+![image.png](./picture_libs/75d0c55afc84454b9639c9534c385d02.png)
 
 此时，点击页面右上角的`virtual host`下拉菜单，切换`virtual host`为 `/hmall`：
 
-![image.png](picture_libs\b174c75c068d9acc974856a545367eed.png)
+![image.png](./picture_libs/b174c75c068d9acc974856a545367eed.png)
 
 然后再次查看queues选项卡，会发现之前的队列已经看不到了： 这就是基于`virtual host`的隔离效果。
 
@@ -334,7 +334,7 @@ SpringAmqp的官方地址： [Spring AMQP](https://spring.io/projects/spring-amq
 
 在之前的案例中，我们都是经过交换机发送消息到队列，不过有时候为了测试方便，我们也**可以直接向队列发送消息，跳过交换机**。
 
-![](picture_libs\4d70860446c93cc33c631ad916387b3c.png)
+![](./picture_libs/4d70860446c93cc33c631ad916387b3c.png)
 
 +   publisher直接发送消息到队列
     
@@ -345,9 +345,9 @@ SpringAmqp的官方地址： [Spring AMQP](https://spring.io/projects/spring-amq
 
 为了方便测试，我们现在控制台新建一个队列：simple.queue
 
-![](picture_libs\090a71871c5fbaf871484ae3f2f1a482.png)
+![](./picture_libs/090a71871c5fbaf871484ae3f2f1a482.png)
 
-![](picture_libs\0c293210856acd9f81310824307c8aff.png)
+![](./picture_libs/0c293210856acd9f81310824307c8aff.png)
 
 * * *
 
@@ -384,7 +384,7 @@ spring:
 
  打开控制台，可以看到消息已经发送到队列中：
 
-![](picture_libs\68f6fc0e5d508e0fb003ddc574128f6e.png)
+![](./picture_libs/68f6fc0e5d508e0fb003ddc574128f6e.png)
 
 接下来，我们再来实现消息接收。
 
@@ -419,7 +419,7 @@ public class SpringRabbitListener {
 
 运行结果
 
-![](picture_libs\08ba674ed005f1d8d9e7a092420e4860.png)
+![](./picture_libs/08ba674ed005f1d8d9e7a092420e4860.png)
 
 * * *
 
@@ -427,13 +427,13 @@ public class SpringRabbitListener {
 
 Work queues，任务模型。简单来说就是**让多个消费者绑定到一个队列，共同消费队列中的消息**。
 
-![](picture_libs\26f19b1ef8dc30fbac9aed770faed436.png)
+![](./picture_libs/26f19b1ef8dc30fbac9aed770faed436.png)
 
 当消息处理比较耗时的时候，可能生产消息的速度会远远大于消息的消费速度。长此以往，消息就会堆积越来越多，无法及时处理。 此时就可以使用work 模型，**多个消费者共同处理消息处理，消息处理的速度就能大大提高**了。
 
 接下来，我们就来模拟这样的场景。 首先，我们在控制台创建一个新的队列，命名为`work.queue`：
 
-![image.png](picture_libs\2cc6fc4e7b7fac62b1ad879af67b6cee.png)
+![image.png](./picture_libs/2cc6fc4e7b7fac62b1ad879af67b6cee.png)
 
 #### 3.2.1 消息发送
 
@@ -518,7 +518,7 @@ spring:
 
 在之前的两个测试案例中，都没有交换机，生产者直接发送消息到队列。而一旦引入交换机，消息发送的模式会有很大变化：
 
-![](picture_libs\f67219aaeca8078d4c8d6bd1dab6aca5.png)
+![](./picture_libs/f67219aaeca8078d4c8d6bd1dab6aca5.png)
 
 可以看到，在订阅模型中，多了一个exchange角色，而且过程略有变化：
 
@@ -548,7 +548,7 @@ spring:
 
 Fanout，英文翻译是扇出，我觉得在MQ中叫广播更合适。 在广播模式下，消息发送流程是这样的：
 
-![](picture_libs\8aca1936f6a747ef1adcd6d565065013.png)
+![](./picture_libs/8aca1936f6a747ef1adcd6d565065013.png)
 
 > +   1）  可以有多个队列
 >
@@ -563,27 +563,27 @@ Fanout，英文翻译是扇出，我觉得在MQ中叫广播更合适。 在广�
 
 ##### 案例演示 
 
-![](picture_libs\f418638d5e888bb13731f56842e322b4.png)
+![](./picture_libs/f418638d5e888bb13731f56842e322b4.png)
 
 ##### 3.3.1.1 声明队列和交换机
 
 在控制台创建队列`fanout.queue1`:
 
-![image.png](picture_libs\9fe5481929375e32cc8796aafb9e275c.png)
+![image.png](./picture_libs/9fe5481929375e32cc8796aafb9e275c.png)
 
 在创建一个队列`fanout.queue2`：
 
-![image.png](picture_libs\9e39c764321ae16aeb1e5879d79fbf67.png)
+![image.png](./picture_libs/9e39c764321ae16aeb1e5879d79fbf67.png)
 
 然后再创建一个交换机：
 
-![image.png](picture_libs\42e43707cb9355569d4f376a30878d67.png)
+![image.png](./picture_libs/42e43707cb9355569d4f376a30878d67.png)
 
 然后绑定两个队列到交换机：
 
-![image.png](picture_libs\797f987fd0370cf975ff163f00059195.png)
+![image.png](./picture_libs/797f987fd0370cf975ff163f00059195.png)
 
-![image.png](picture_libs\5cc2dba15a41b0d5968cf31d71ee2339.png)
+![image.png](./picture_libs/5cc2dba15a41b0d5968cf31d71ee2339.png)
 
 ##### 3.3.1.2 消息发送
 
@@ -635,7 +635,7 @@ public void listenFanoutQueue2(String msg) {
 
 在Fanout模式中，一条消息，会被所有订阅的队列都消费。但是，在某些场景下，我们希望不同的消息被不同的队列消费。这时就要用到Direct类型的Exchange。
 
-![image.png](picture_libs\46c9526dce1633e037d50e2a546c2e19.png)
+![image.png](./picture_libs/46c9526dce1633e037d50e2a546c2e19.png)
 
 在Direct模型下：
 
@@ -648,7 +648,7 @@ public void listenFanoutQueue2(String msg) {
 
 **案例需求如图**：
 
-![image.png](picture_libs\51c389631b0e9e205b99fc56a4cabdcc.png)
+![image.png](./picture_libs/51c389631b0e9e205b99fc56a4cabdcc.png)
 
 1.  声明一个名为`hmall.direct`的交换机
     
@@ -665,21 +665,21 @@ public void listenFanoutQueue2(String msg) {
 
 首先在控制台声明两个队列`direct.queue1`和`direct.queue2`，这里不再展示过程：
 
-![image.png](picture_libs\c43193ed384662af9ea93b010ff394fe.png)
+![image.png](./picture_libs/c43193ed384662af9ea93b010ff394fe.png)
 
 然后声明一个direct类型的交换机，命名为`hmall.direct`:
 
-![image.png](picture_libs\517f580bdf583f2db8937be6a950ee9d.png)
+![image.png](./picture_libs/517f580bdf583f2db8937be6a950ee9d.png)
 
 然后使用`red`和`blue`作为key，绑定`direct.queue1`到`hmall.direct`：
 
-![image.png](picture_libs\0b9abbd4290a02dcd2fe97cd2081e7d7.png)
+![image.png](./picture_libs/0b9abbd4290a02dcd2fe97cd2081e7d7.png)
 
-![image.png](picture_libs\3df68a32de4c6aee00cfe9843efa22bd.png)
+![image.png](./picture_libs/3df68a32de4c6aee00cfe9843efa22bd.png)
 
 同理，使用`red`和`yellow`作为key，绑定`direct.queue2`到`hmall.direct`，步骤略，最终结果：
 
-![image.png](picture_libs\861134f84172960512d32b4f49a93735.png)
+![image.png](./picture_libs/861134f84172960512d32b4f49a93735.png)
 
 ##### 3.3.2.2 消息接收
 
@@ -715,7 +715,7 @@ public void testSendDirectExchange() {
 
 由于使用的red这个key，所以两个消费者都收到了消息：
 
-![image.png](picture_libs\669aca6987858b75c083590c25178763.png)
+![image.png](./picture_libs/669aca6987858b75c083590c25178763.png)
 
 我们再切换为blue这个key：
 
@@ -733,7 +733,7 @@ public void testSendDirectExchange() {
 
 你会发现，只有消费者1收到了消息：
 
-![image.png](picture_libs\846c016e99184a9de8adad3b2e0de1f7.png)
+![image.png](./picture_libs/846c016e99184a9de8adad3b2e0de1f7.png)
 
 ##### 3.3.2.4 总结
 
@@ -772,9 +772,9 @@ public void testSendDirectExchange() {
 > +   `item.*`：只能匹配`item.spu`
 >
 
-![](picture_libs\66d8fe447658fe8f1937e65705f1954d.png)
+![](./picture_libs/66d8fe447658fe8f1937e65705f1954d.png)
 
-![](picture_libs\18f0229dbafb13e1388af5fe0f9957e0.png)
+![](./picture_libs/18f0229dbafb13e1388af5fe0f9957e0.png)
 
 * * *
 
@@ -782,7 +782,7 @@ public void testSendDirectExchange() {
 
 首先，在控制台按照图示例子创建队列、交换机，并利用通配符绑定队列和交换机。此处步骤略。最终结果如下：
 
-![](picture_libs\55b6aefaeb7c2029c40df3463e33f9d3.png)
+![](./picture_libs/55b6aefaeb7c2029c40df3463e33f9d3.png)
 
 ##### 3.3.2.2 消息发送
 
@@ -842,25 +842,25 @@ public void listenTopicQueue2(String msg){
 
 SpringAMQP提供了一个Queue类，用来创建队列：
 
-![image.png](picture_libs\ae15eb6fc6e3e5a75b06a5abff3b5bc6.png)
+![image.png](./picture_libs/ae15eb6fc6e3e5a75b06a5abff3b5bc6.png)
 
 SpringAMQP还提供了一个Exchange接口，来表示所有不同类型的交换机：
 
-![image.png](picture_libs\0594519178f9f6876955d830d2c6bb9c.png)
+![image.png](./picture_libs/0594519178f9f6876955d830d2c6bb9c.png)
 
 我们可以自己创建队列和交换机，不过SpringAMQP还提供了**ExchangeBuilder**来简化这个过程： 
 
-![image.png](picture_libs\fd7f86bbcf340b22de8b5bcd5c3182df.png)
+![image.png](./picture_libs/fd7f86bbcf340b22de8b5bcd5c3182df.png)
 
 而在绑定队列和交换机时，则需要使用BindingBuilder来创建Binding对象：
 
-![image.png](picture_libs\05a74510595e3e40d273189d29ee59fb.png)
+![image.png](./picture_libs/05a74510595e3e40d273189d29ee59fb.png)
 
 #### 3.4.2.fanout示例
 
 在consumer中创建一个**配置类**，声明队列和交换机：
 
-![](picture_libs\8aca1936f6a747ef1adcd6d565065013.png)
+![](./picture_libs/8aca1936f6a747ef1adcd6d565065013.png)
 
 ```java
 @Configuration
@@ -914,7 +914,7 @@ public class FanoutConfig {
 
 direct模式由于要绑定多个KEY，会非常麻烦，每一个Key都要编写一个binding：
 
-![](picture_libs\bc1b899057d65182c6aeee5de06a0594.png)
+![](./picture_libs/bc1b899057d65182c6aeee5de06a0594.png)
 
 ```java
 @Configuration
@@ -1035,7 +1035,7 @@ public void listenTopicQueue2(String msg){
 
 Spring的消息发送代码接收的消息体是一个**Object**：
 
-![image.png](picture_libs\3ae0e286a70b815f9e4722cd246c4ca6.png)
+![image.png](./picture_libs/3ae0e286a70b815f9e4722cd246c4ca6.png)
 
 而在数据传输时，它会把你发送的消息序列化为字节发送给MQ，接收消息的时候，还会把字节反序列化为Java对象。 只不过，默认情况下Spring采用的序列化方式是**JDK序列化**。众所周知，JDK序列化存在下列问题：
 
@@ -1081,7 +1081,7 @@ public MessageConverter messageConverter(){
 
 此时，我们到MQ控制台**删除**`object.queue`中的旧的消息。然后再次执行刚才的消息发送的代码，到MQ的控制台查看消息结构：
 
-![image.png](picture_libs\9c2e075e187cdbb53e2f27619a59dbc0.png)
+![image.png](./picture_libs/9c2e075e187cdbb53e2f27619a59dbc0.png)
 
 #### 3.5.2 消费者接收Object
 
@@ -1100,7 +1100,7 @@ public void listenSimpleQueueMessage(Map<String, Object> msg) throws Interrupted
 
 案例需求：改造余额支付功能，将支付成功后基于OpenFeign的交易服务的更新订单状态接口的同步调用，改为基于RabbitMQ的异步通知。 **（也就是说，只要交易成功了，不需要等他通知完才结束交易的模块，或者说通知失败也不导致我交易服务的回滚）**如图：
 
-![image.png](picture_libs\acf0f4a96a4d2453ac2e91930fce1ce5.png)
+![image.png](./picture_libs/acf0f4a96a4d2453ac2e91930fce1ce5.png)
 
 说明，我们只关注交易服务，步骤如下：
 
