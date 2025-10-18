@@ -4,7 +4,7 @@
 
 我们先来看看什么是同步通讯和异步通讯。如图
 
-![](picture_libs\a988129dc719bdd8ad46a986e7c59ee1.png)
+![](./picture_libs/a988129dc719bdd8ad46a986e7c59ee1.png)
 
 解读：
 
